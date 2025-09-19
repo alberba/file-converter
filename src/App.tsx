@@ -1,11 +1,11 @@
 import "./App.css";
+import DropZone from "./DropZone";
 
 function App() {
-
   return (
     <>
       <div>
-        Hello World
+        <DropZone />
       </div>
     </>
   );
