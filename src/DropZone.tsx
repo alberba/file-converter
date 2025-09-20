@@ -1,73 +1,90 @@
 import { useState } from "react";
+import {
+  loadImageAsDataURL,
+  createCanvasFromImage,
+  getFileInfo,
+  fileToImage,
+  downloadImage,
+} from "./utils/imageUtils";
+
+const formats = ["png", "jpg", "webp", "gif"];
 
 export default function DropZone() {
-  const [preview, setPreview] = useState<string | null>(null);
-  const [fileExtension, setFileExtension] = useState<string | null>(null);
-  const [fileName, setFileName] = useState<string | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
 
-  const dropHandle = (ev: React.DragEvent<HTMLElement>) => {
-    ev.preventDefault();
-    setFile(ev.dataTransfer.files[0]);
+  const [selectedFormat, setSelectedFormat] = useState<string>("png");
 
-    if (file) {
-      setFileName(file.name.split(".")[0] || null);
-      setFileExtension(file.name.split(".").pop()?.toUpperCase() || null);
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        if (e.target?.result) {
-          setPreview(e.target.result as string);
-        }
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleDrop = async (dragEvent: React.DragEvent<HTMLElement>) => {
+    dragEvent.preventDefault();
+    const droppedFile = dragEvent.dataTransfer.files[0];
+    if (!droppedFile) return;
+
+    setFile(droppedFile);
+
+    setImagePreview(await loadImageAsDataURL(droppedFile));
   };
 
-  const convertImage = async () => {
-    const res = await fetch("/api/convert", {
-      method: "POST",
-      headers: {
-        "Content-Type": file!.type,
-      },
-      body: await file!.arrayBuffer(),
-    });
+  const convertToFormat = async () => {
+    const image = await fileToImage(file as File);
+    const { canvas, canvasContext } = createCanvasFromImage(image);
+    canvasContext.drawImage(image, 0, 0);
 
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
+    const convertedImageBlob = await new Promise<Blob>((resolve, reject) =>
+      canvas.toBlob(
+        (blob) => (blob ? resolve(blob) : reject("Error en conversión")),
+        `image/${selectedFormat}`,
+      ),
+    );
 
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${fileName || "converted"}.webp`;
-    link.click();
-    URL.revokeObjectURL(url);
+    downloadImage(convertedImageBlob, getFileInfo(file!).name, selectedFormat);
   };
 
   return (
     <section className="flex gap-8">
       <main
         className="border p-10 max-w-2xl"
-        onDrop={dropHandle}
+        onDrop={handleDrop}
         onDragOver={(ev) => {
           ev.preventDefault();
         }}
       >
-        {preview ? <img src={preview} alt="Preview" /> : "Drop files here"}
+        {imagePreview ? (
+          <img src={imagePreview} alt="Preview" />
+        ) : (
+          "Drop files here"
+        )}
       </main>
-      <aside className="border p-4 flex flex-col gap-4">
-        <h2 className="text-xl font-bold">Convertir</h2>
-        <div className="flex gap-2">
-          {fileExtension && <p>De {fileExtension} a</p>}
-          <select className="border" name="" id="">
-            <option value="png">PNG</option>
-            <option value="jpg">JPG</option>
-            <option value="webp">WEBP</option>
-            <option value="gif">GIF</option>
-          </select>
-        </div>
-        <button className="border" onClick={convertImage}>
-          Convert Image
-        </button>
-      </aside>
+      {file && (
+        <aside className="border p-4 flex flex-col gap-4">
+          <h2 className="text-xl font-bold">Convertir</h2>
+          <div className="flex gap-2">
+            {file && <p>De {getFileInfo(file!).extension} a</p>}
+            <select
+              className="border"
+              name=""
+              id=""
+              value={selectedFormat}
+              onChange={(e) => setSelectedFormat(e.target.value)}
+            >
+              {formats.map((format) => {
+                return (
+                  <option key={format} value={format}>
+                    {format.toUpperCase()}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          <button
+            className="border"
+            onClick={convertToFormat}
+            data-testid="convert-button"
+          >
+            Convert Image
+          </button>
+        </aside>
+      )}
     </section>
   );
 }
