@@ -13,6 +13,7 @@ export default async (req: VercelRequest, res: VercelResponse) => {
     res.setHeader("Content-Type", "image/webp");
     res.status(200).send(output);
   } catch (error) {
+    console.error("Conversion error:", error);
     res.status(500).json({ error: "Internal Server Error", details: error });
   }
 };
