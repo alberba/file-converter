@@ -4,14 +4,15 @@ export default function DropZone() {
   const [preview, setPreview] = useState<string | null>(null);
   const [fileExtension, setFileExtension] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
 
   const dropHandle = (ev: React.DragEvent<HTMLElement>) => {
     ev.preventDefault();
-    const file = ev.dataTransfer.files[0];
-    setFileName(file.name.split(".")[0] || null);
-    setFileExtension(file.name.split(".").pop()?.toUpperCase() || null);
+    setFile(ev.dataTransfer.files[0]);
 
     if (file) {
+      setFileName(file.name.split(".")[0] || null);
+      setFileExtension(file.name.split(".").pop()?.toUpperCase() || null);
       const reader = new FileReader();
       reader.onload = function (e) {
         if (e.target?.result) {
@@ -22,14 +23,23 @@ export default function DropZone() {
     }
   };
 
-  const downloadImage = () => {
-    if (!preview) return;
+  const convertImage = async () => {
+    const res = await fetch("/api/convert", {
+      method: "POST",
+      headers: {
+        "Content-Type": file!.type,
+      },
+      body: await file!.arrayBuffer(),
+    });
+
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+
     const link = document.createElement("a");
-    link.href = preview;
-    link.download = `${fileName}.${fileExtension?.toLowerCase() || "png"}`;
-    document.body.appendChild(link);
+    link.href = url;
+    link.download = `${fileName || "converted"}.webp`;
     link.click();
-    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -54,8 +64,8 @@ export default function DropZone() {
             <option value="gif">GIF</option>
           </select>
         </div>
-        <button className="border" onClick={downloadImage}>
-          Download Image
+        <button className="border" onClick={convertImage}>
+          Convert Image
         </button>
       </aside>
     </section>
