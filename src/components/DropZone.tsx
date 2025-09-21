@@ -1,30 +1,39 @@
-import { useState } from "react";
-import { loadImageAsDataURL, fileToImage } from "../utils/imageUtils";
+import { useEffect, useRef, useState } from "react";
+import { fileToImage } from "../utils/imageUtils";
 import ConvertOptions from "./ConvertOptions/ConvertOptions";
 
 export default function DropZone() {
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [file, setFile] = useState<File | null>(null);
+  const [image, setImage] = useState<HTMLImageElement | null>(null);
+  const [fileName, setFileName] = useState<string | null>(null);
 
   const [newWidth, setNewWidth] = useState<number | null>(null);
   const [newHeight, setNewHeight] = useState<number | null>(null);
+
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const handleDrop = async (dragEvent: React.DragEvent<HTMLElement>) => {
     dragEvent.preventDefault();
     const droppedFile = dragEvent.dataTransfer.files[0];
     if (!droppedFile) return;
+    setFileName(droppedFile.name);
 
-    setFile(droppedFile);
-    await setSize(droppedFile);
-
-    setImagePreview(await loadImageAsDataURL(droppedFile));
+    const img = await fileToImage(droppedFile);
+    setImage(img);
+    setNewWidth(img.width);
+    setNewHeight(img.height);
   };
 
-  const setSize = async (droppedFile: File) => {
-    const image = await fileToImage(droppedFile);
-    setNewHeight(image.height);
-    setNewWidth(image.width);
-  };
+  useEffect(() => {
+    if (image && canvasRef.current) {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      canvas.width = newWidth || image.width;
+      canvas.height = newHeight || image.height;
+      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+    }
+  }, [image, newHeight, newWidth]);
 
   return (
     <section className="mt-8 flex w-3/4 justify-center gap-8">
@@ -35,19 +44,16 @@ export default function DropZone() {
           ev.preventDefault();
         }}
       >
-        {imagePreview ? (
-          <img src={imagePreview} alt="Preview" />
-        ) : (
-          "Drop files here"
-        )}
+        {image ? <canvas ref={canvasRef} className="w-full" /> : "Drop files here"}
       </main>
-      {file && (
+      {image && (
         <ConvertOptions
           newWidth={newWidth}
           newHeight={newHeight}
           setNewWidth={setNewWidth}
           setNewHeight={setNewHeight}
-          file={file}
+          image={image}
+          fileName={fileName!}
         />
       )}
     </section>

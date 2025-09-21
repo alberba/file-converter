@@ -3,33 +3,32 @@ import SizeInput from "./SizeInput";
 import { useState } from "react";
 
 import {
-  fileToImage,
   createCanvasFromImage,
-  getFileInfo,
   downloadImage,
 } from "../../utils/imageUtils";
 
 type ConvertOptionsProps = {
   newWidth: number | null;
   newHeight: number | null;
-  file: File;
+  image: HTMLImageElement;
   setNewWidth: (width: number) => void;
   setNewHeight: (height: number) => void;
+  fileName: string;
 };
 
 export default function ConvertOptions({
   newWidth,
   newHeight,
-  file,
+  image,
   setNewWidth,
   setNewHeight,
+  fileName,
 }: ConvertOptionsProps) {
   const [selectedFormat, setSelectedFormat] = useState<string>("webp");
+  const [maintainRatio, setMaintainRatio] = useState<boolean>(true);
 
   const convertToFormat = async () => {
     if (!newWidth || !newHeight) return;
-
-    const image = await fileToImage(file as File);
     const { canvas, canvasContext } = createCanvasFromImage(
       newWidth,
       newHeight,
@@ -43,7 +42,15 @@ export default function ConvertOptions({
       ),
     );
 
-    downloadImage(convertedImageBlob, getFileInfo(file!).name, selectedFormat);
+    downloadImage(convertedImageBlob, fileName, selectedFormat);
+  };
+
+  const handleNewWidth = (width: number) => {
+    if (maintainRatio && image) {
+      const aspectRatio = image.width / image.height;
+      setNewHeight(Math.round(width / aspectRatio));
+    }
+    setNewWidth(width);
   };
 
   return (
@@ -57,8 +64,17 @@ export default function ConvertOptions({
       </div>
       <div className="flex flex-col gap-2">
         <p className="mb-1 text-xl font-bold">Resize</p>
-        <SizeInput type="Width" value={newWidth!} setValue={setNewWidth} />
+        <SizeInput type="Width" value={newWidth!} setValue={handleNewWidth} />
         <SizeInput type="Height" value={newHeight!} setValue={setNewHeight} />
+        <label className="mt-1 flex justify-between">
+          Maintain aspect ratio
+          <input
+            type="checkbox"
+            checked={maintainRatio}
+            onChange={() => setMaintainRatio(!maintainRatio)}
+            className="w-4"
+          />
+        </label>
       </div>
       <button
         className="mt-4 ml-auto w-fit rounded-2xl border bg-blue-500 p-4 py-2 font-semibold text-white"
