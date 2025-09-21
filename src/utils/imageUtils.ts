@@ -13,10 +13,13 @@ export function fileToImage(file: File): Promise<HTMLImageElement> {
   });
 }
 
-export function createCanvasFromImage(img: HTMLImageElement) {
+export function createCanvasFromImage(
+  newWidth: number,
+  newHeight: number,
+) {
   const canvas = document.createElement("canvas");
-  canvas.width = img.width;
-  canvas.height = img.height;
+  canvas.width = newWidth;
+  canvas.height = newHeight;
   const canvasContext = canvas.getContext("2d");
   if (!canvasContext)
     throw new Error("No se pudo obtener el contexto del canvas");
