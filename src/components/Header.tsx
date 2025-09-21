@@ -1,7 +1,7 @@
 export default function Header() {
   return (
-    <header className="w-full">
-      <h1 className="p-4 text-4xl font-bold">File Converter</h1>
+    <header className="w-full py-10">
+      <h1 className="px-8 text-xl font-semibold">File Converter</h1>
     </header>
   );
 }

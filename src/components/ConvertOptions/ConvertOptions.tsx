@@ -54,7 +54,7 @@ export default function ConvertOptions({
   };
 
   return (
-    <aside className="absolute right-0 bottom-0 m-4 flex w-2xs flex-col gap-4 rounded-2xl border border-gray-200 p-4 shadow-2xl">
+    <aside className="absolute right-0 bottom-0 m-4 flex w-2xs flex-col gap-4 rounded-3xl border border-gray-200 p-4 shadow-2xl">
       <h2 className="text-2xl font-bold">File Options</h2>
       <div className="flex gap-2">
         <FormatSelector
@@ -77,7 +77,7 @@ export default function ConvertOptions({
         </label>
       </div>
       <button
-        className="mt-4 ml-auto w-fit rounded-2xl border bg-blue-500 p-4 py-2 font-semibold text-white"
+        className="mt-4 ml-auto w-fit rounded-2xl border bg-accent p-4 py-2 font-semibold text-white"
         onClick={convertToFormat}
         data-testid="convert-button"
       >

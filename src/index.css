@@ -7,3 +7,12 @@
 body {
   margin: 0;
 }
+
+strong {
+  @apply text-accent font-semibold;
+}
+
+@theme {
+  --color-accent: #2c7fff;
+  --color-accent-40: rgba(44, 127, 255, 0.3);
+}

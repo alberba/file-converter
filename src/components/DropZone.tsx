@@ -1,27 +1,26 @@
-import { useEffect, useRef, useState } from "react";
-import { fileToImage } from "../utils/imageUtils";
+import { useEffect, useRef } from "react";
 import ConvertOptions from "./ConvertOptions/ConvertOptions";
 
-export default function DropZone() {
-  const [image, setImage] = useState<HTMLImageElement | null>(null);
-  const [fileName, setFileName] = useState<string | null>(null);
+type DropZoneProps = {
+  image: HTMLImageElement | null;
+  handleDrop: (dragEvent: React.DragEvent<HTMLElement>) => Promise<void>;
+  fileName: string | null;
+  newWidth: number | null;
+  newHeight: number | null;
+  setNewWidth: (width: number) => void;
+  setNewHeight: (height: number) => void;
+};
 
-  const [newWidth, setNewWidth] = useState<number | null>(null);
-  const [newHeight, setNewHeight] = useState<number | null>(null);
-
+export default function DropZone({
+  image,
+  handleDrop,
+  fileName,
+  newHeight,
+  newWidth,
+  setNewHeight,
+  setNewWidth,
+}: DropZoneProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  const handleDrop = async (dragEvent: React.DragEvent<HTMLElement>) => {
-    dragEvent.preventDefault();
-    const droppedFile = dragEvent.dataTransfer.files[0];
-    if (!droppedFile) return;
-    setFileName(droppedFile.name);
-
-    const img = await fileToImage(droppedFile);
-    setImage(img);
-    setNewWidth(img.width);
-    setNewHeight(img.height);
-  };
 
   useEffect(() => {
     if (image && canvasRef.current) {
@@ -44,7 +43,11 @@ export default function DropZone() {
           ev.preventDefault();
         }}
       >
-        {image ? <canvas ref={canvasRef} className="w-full" /> : "Drop files here"}
+        {image ? (
+          <canvas ref={canvasRef} className="w-full" />
+        ) : (
+          "Drop files here"
+        )}
       </main>
       {image && (
         <ConvertOptions
