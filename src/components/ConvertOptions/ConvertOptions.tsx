@@ -7,7 +7,7 @@ import {
   createCanvasFromImage,
   getFileInfo,
   downloadImage,
-} from "./utils/imageUtils";
+} from "../../utils/imageUtils";
 
 type ConvertOptionsProps = {
   newWidth: number | null;

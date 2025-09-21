@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { loadImageAsDataURL, fileToImage } from "./utils/imageUtils";
-import ConvertOptions from "./ConvertOptions";
+import { loadImageAsDataURL, fileToImage } from "../utils/imageUtils";
+import ConvertOptions from "./ConvertOptions/ConvertOptions";
 
 export default function DropZone() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);

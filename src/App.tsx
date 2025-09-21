@@ -1,6 +1,6 @@
 import "./App.css";
-import DropZone from "./DropZone";
-import Header from "./Header";
+import DropZone from "./components/DropZone";
+import Header from "./components/Header";
 
 function App() {
   return (
