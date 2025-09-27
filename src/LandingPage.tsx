@@ -12,7 +12,7 @@ export default function LandingPage({ handleDrop }: LandingPageProps) {
       onDragOver={(ev) => ev.preventDefault()}
     >
       {/*<Header />*/}
-      <main className="mt-52 h-full flex w-full flex-col items-center gap-8 text-center">
+      <main className="mt-52 flex w-full flex-col items-center gap-8 text-center">
         <h2 className="mx-auto max-w-5xl text-8xl font-bold">
           Convierte <strong>tus imágenes</strong> a cualquier formato
         </h2>
