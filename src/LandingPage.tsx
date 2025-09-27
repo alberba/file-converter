@@ -1,7 +1,9 @@
 import Header from "./components/Header";
 
 type LandingPageProps = {
-  handleDrop: (dragEvent: React.DragEvent<HTMLElement>) => Promise<void>;
+  handleDrop: (
+    dragEvent: React.DragEvent<HTMLElement> | React.FormEvent<HTMLElement>,
+  ) => Promise<void>;
 };
 
 export default function LandingPage({ handleDrop }: LandingPageProps) {
@@ -18,9 +20,20 @@ export default function LandingPage({ handleDrop }: LandingPageProps) {
         </h2>
         <div className="flex items-center gap-2">
           <p>Simplemente arrastra tu imagen o </p>
-          <button className="bg-accent rounded-2xl p-4 py-2 text-sm font-semibold text-white">
+          <label
+            htmlFor="inputFile"
+            className="bg-accent cursor-pointer rounded-4xl p-4 py-2 text-lg font-semibold text-white"
+          >
             Haz click aquí
-          </button>
+          </label>
+          <input
+            type="file"
+            name="inputFile"
+            id="inputFile"
+            className="hidden"
+            onInput={(e) => handleDrop(e)}
+            accept=".jpg, .jpeg, .webp, .gif"
+          />
         </div>
         <section>
           <article>

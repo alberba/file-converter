@@ -12,13 +12,22 @@ function App() {
   const [newWidth, setNewWidth] = useState<number | null>(null);
   const [newHeight, setNewHeight] = useState<number | null>(null);
 
-  const handleDrop = async (dragEvent: React.DragEvent<HTMLElement>) => {
-    dragEvent.preventDefault();
-    const droppedFile = dragEvent.dataTransfer.files[0];
-    if (!droppedFile) return;
-    setFileName(droppedFile.name);
+  const handleDrop = async (
+    event: React.DragEvent<HTMLElement> | React.FormEvent<HTMLElement>,
+  ) => {
+    let file: File | null = null;
+    if ("dataTransfer" in event) {
+      event.preventDefault();
+      file = event.dataTransfer.files[0];
+    } else {
+      const input = event.target as HTMLInputElement;
+      file = input.files?.[0] || null;
+    }
 
-    const img = await fileToImage(droppedFile);
+    if (!file) return;
+    setFileName(file.name);
+
+    const img = await fileToImage(file);
     setImage(img);
     setNewWidth(img.width);
     setNewHeight(img.height);
