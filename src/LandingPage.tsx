@@ -1,5 +1,3 @@
-import Header from "./components/Header";
-
 type LandingPageProps = {
   handleDrop: (
     dragEvent: React.DragEvent<HTMLElement> | React.FormEvent<HTMLElement>,
@@ -13,12 +11,12 @@ export default function LandingPage({ handleDrop }: LandingPageProps) {
       onDrop={handleDrop}
       onDragOver={(ev) => ev.preventDefault()}
     >
-      <Header />
-      <main className="mt-42 flex w-full flex-col items-center gap-8 text-center">
-        <h2 className="mx-auto max-w-4xl text-6xl font-semibold">
+      {/*<Header />*/}
+      <main className="mt-52 h-full flex w-full flex-col items-center gap-8 text-center">
+        <h2 className="mx-auto max-w-5xl text-8xl font-bold">
           Convierte <strong>tus imágenes</strong> a cualquier formato
         </h2>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 text-2xl">
           <p>Simplemente arrastra tu imagen o </p>
           <label
             htmlFor="inputFile"
@@ -39,7 +37,7 @@ export default function LandingPage({ handleDrop }: LandingPageProps) {
           <article>
             <img src="" alt="" />
             <p className="text-sm text-gray-500">
-              Soportamos JPG, PNG, WEBP, AVIF y más
+              Soportamos JPG, PNG, WEBP y GIF
             </p>
           </article>
           <article>

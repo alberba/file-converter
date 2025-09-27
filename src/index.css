@@ -9,7 +9,7 @@ body {
 }
 
 strong {
-  @apply text-accent font-semibold;
+  @apply text-accent font-bold;
 }
 
 @theme {
