@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="548.354" height="500.085" viewBox="0 0 145.085 132.314">
+  <g transform="translate(-22.077 -38.467)">
+    <circle cx="53.154" cy="109.367" r="31.077" style="fill:#2c7fff;fill-opacity:1;stroke:#000;stroke-width:0"/>
+    <circle cx="98.245" cy="106.466" r="31.077" style="fill:#2c7fff;fill-opacity:1;stroke:#000;stroke-width:0"/>
+    <circle cx="67.104" cy="70.156" r="23.812" style="fill:#2c7fff;fill-opacity:1;stroke:#000;stroke-width:0"/>
+    <circle cx="112.023" cy="78.467" r="40" style="fill:#2c7fff;fill-opacity:1;stroke:#000;stroke-width:0"/>
+    <circle cx="75.572" cy="142.89" r="27.891" style="fill:#2c7fff;fill-opacity:1;stroke:#000;stroke-width:0"/>
+    <circle cx="127.162" cy="129.378" r="40" style="fill:#2c7fff;fill-opacity:1;stroke:#000;stroke-width:0"/>
+  </g>
+  <g transform="translate(-22.077 -38.467)">
+    <path id="a" d="M139.952-24.858h8.163v64.137h-8.163z" style="fill:#fff;fill-opacity:1;stroke:#000;stroke-width:0" transform="rotate(45)"/>
+    <use xlink:href="#a" transform="rotate(90 96.748 106.945)"/>
+  </g>
+</svg>

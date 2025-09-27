@@ -1,8 +1,9 @@
 import { useEffect, useRef } from "react";
 import ConvertOptions from "./ConvertOptions/ConvertOptions";
+import cloudSvg from "../assets/cloud.svg";
 
 type DropZoneProps = {
-  image: HTMLImageElement | null;
+  image: HTMLImageElement;
   handleDrop: (dragEvent: React.DragEvent<HTMLElement>) => Promise<void>;
   fileName: string | null;
   newWidth: number | null;
@@ -43,22 +44,26 @@ export default function DropZone({
           ev.preventDefault();
         }}
       >
-        {image ? (
-          <canvas ref={canvasRef} className="w-full" />
-        ) : (
-          "Drop files here"
-        )}
+        <canvas ref={canvasRef} className="w-full" />
       </main>
-      {image && (
-        <ConvertOptions
-          newWidth={newWidth}
-          newHeight={newHeight}
-          setNewWidth={setNewWidth}
-          setNewHeight={setNewHeight}
-          image={image}
-          fileName={fileName!}
+      <ConvertOptions
+        newWidth={newWidth}
+        newHeight={newHeight}
+        setNewWidth={setNewWidth}
+        setNewHeight={setNewHeight}
+        image={image}
+        fileName={fileName!}
+      />
+      <button
+        className="absolute top-5 right-5 cursor-pointer"
+        onClick={() => window.location.reload()}
+      >
+        <img
+          src={cloudSvg}
+          className="h-18 drop-shadow-[0_12px_12px_rgba(0,0,0,0.3)]"
+          alt="Go to Home Page"
         />
-      )}
+      </button>
     </section>
   );
 }
