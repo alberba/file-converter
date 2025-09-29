@@ -1,3 +1,7 @@
+import Feature from "./Feature";
+import Hero from "./Hero";
+import Github from "../assets/github.svg";
+
 type LandingPageProps = {
   handleDrop: (
     dragEvent: React.DragEvent<HTMLElement> | React.FormEvent<HTMLElement>,
@@ -13,26 +17,7 @@ export default function LandingPage({ handleDrop }: LandingPageProps) {
     >
       {/*<Header />*/}
       <main className="mt-58 flex w-full flex-col items-center gap-8 text-center">
-        <h2 className="mx-auto max-w-5xl text-8xl font-bold">
-          Convierte <strong>tus imágenes</strong> a cualquier formato
-        </h2>
-        <div className="flex items-center gap-2 text-2xl">
-          <p>Simplemente arrastra tu imagen o </p>
-          <label
-            htmlFor="inputFile"
-            className="bg-accent cursor-pointer rounded-4xl p-4 py-2 text-lg font-semibold text-white"
-          >
-            Haz click aquí
-          </label>
-          <input
-            type="file"
-            name="inputFile"
-            id="inputFile"
-            className="hidden"
-            onInput={(e) => handleDrop(e)}
-            accept=".jpg, .jpeg, .webp, .gif"
-          />
-        </div>
+        <Hero fileInputcallable={handleDrop} />
         <section>
           <article>
             <img src="" alt="" />
@@ -47,7 +32,14 @@ export default function LandingPage({ handleDrop }: LandingPageProps) {
             <img src="" alt="" />
           </article>
         </section>
+        <Feature />
       </main>
+      <footer className="flex w-full items-center justify-between py-4">
+        <span>Made with ❤️ by Albert</span>
+        <a href="https://github.com/alberba/file-converter" target="_blank">
+          <img src={Github} alt="" className="h-8" />
+        </a>
+      </footer>
     </div>
   );
 }
