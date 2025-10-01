@@ -1,39 +1,58 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ConvertOptions from "./ConvertOptions/ConvertOptions";
 import cloudSvg from "../assets/cloud.svg";
+import type { ConversionOptions, FileData } from "../types/types";
 
 type DropZoneProps = {
-  image: HTMLImageElement;
   handleDrop: (dragEvent: React.DragEvent<HTMLElement>) => Promise<void>;
-  fileName: string | null;
-  newWidth: number | null;
-  newHeight: number | null;
-  setNewWidth: (width: number) => void;
-  setNewHeight: (height: number) => void;
+  file: FileData;
+  options: ConversionOptions;
+  onOptionsChange: (options: ConversionOptions) => void;
 };
 
 export default function DropZone({
-  image,
+  file,
   handleDrop,
-  fileName,
-  newHeight,
-  newWidth,
-  setNewHeight,
-  setNewWidth,
+  options,
+  onOptionsChange,
 }: DropZoneProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [convertedImageBlob, setConvertedImageBlob] = useState<Blob>(
+    new Blob(),
+  );
+
+  const resizeAndRenderCanvas = (
+    canvas: HTMLCanvasElement,
+    img: HTMLImageElement,
+    newWidth: number,
+    newHeight: number,
+  ): HTMLCanvasElement | null => {
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return null;
+
+    canvas.width = newWidth;
+    canvas.height = newHeight;
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    return canvas;
+  };
 
   useEffect(() => {
-    if (image && canvasRef.current) {
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
+    if (!file.img || !canvasRef.current) return;
 
-      canvas.width = newWidth || image.width;
-      canvas.height = newHeight || image.height;
-      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-    }
-  }, [image, newHeight, newWidth]);
+    const imageCanvas = resizeAndRenderCanvas(
+      canvasRef.current,
+      file.img,
+      options.newWidth,
+      options.newHeight,
+    );
+    if (!imageCanvas) return;
+
+    imageCanvas.toBlob((blob) => {
+      if (blob) setConvertedImageBlob(blob);
+      else console.error("Blob conversion failed");
+    }, `image/${options.selectedFormat}`);
+  }, [file.img, options]);
 
   return (
     <section className="mt-8 flex w-3/4 justify-center gap-8">
@@ -47,12 +66,10 @@ export default function DropZone({
         <canvas ref={canvasRef} className="w-full" />
       </main>
       <ConvertOptions
-        newWidth={newWidth}
-        newHeight={newHeight}
-        setNewWidth={setNewWidth}
-        setNewHeight={setNewHeight}
-        image={image}
-        fileName={fileName!}
+        file={file}
+        options={options}
+        onOptionsChange={onOptionsChange}
+        convertedImageBlob={convertedImageBlob}
       />
       <button
         className="absolute top-5 right-5 cursor-pointer"

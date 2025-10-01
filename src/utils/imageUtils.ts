@@ -13,10 +13,7 @@ export function fileToImage(file: File): Promise<HTMLImageElement> {
   });
 }
 
-export function createCanvasFromImage(
-  newWidth: number,
-  newHeight: number,
-) {
+export function createCanvasFromImage(newWidth: number, newHeight: number) {
   const canvas = document.createElement("canvas");
   canvas.width = newWidth;
   canvas.height = newHeight;
@@ -52,4 +49,22 @@ export function downloadImage(
   imageAnchor.download = `${fileName || "converted"}.${selectedFormat}`;
   imageAnchor.click();
   URL.revokeObjectURL(imageUrl);
+}
+
+export function formatBytes(
+  bytes: number,
+  decimals = 2,
+): { value: number; unit: string } {
+  if (bytes === 0) return { value: 0, unit: "Bytes" };
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ["Bytes", "KB", "MB", "GB"];
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return {
+    value: parseFloat((bytes / Math.pow(k, i)).toFixed(dm)),
+    unit: sizes[i],
+  };
 }

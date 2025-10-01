@@ -2,55 +2,64 @@ import FormatSelector from "./FormatSelector";
 import SizeInput from "./SizeInput";
 import { useState } from "react";
 
-import {
-  createCanvasFromImage,
-  downloadImage,
-} from "../../utils/imageUtils";
+import { downloadImage, formatBytes } from "../../utils/imageUtils";
+import arrowUp from "../../assets/up-arrow.svg";
+import type { ConversionOptions, FileData } from "../../types/types";
 
 type ConvertOptionsProps = {
-  newWidth: number | null;
-  newHeight: number | null;
-  image: HTMLImageElement;
-  setNewWidth: (width: number) => void;
-  setNewHeight: (height: number) => void;
-  fileName: string;
+  file: FileData;
+  options: ConversionOptions;
+  onOptionsChange: (options: ConversionOptions) => void;
+  convertedImageBlob: Blob;
 };
 
 export default function ConvertOptions({
-  newWidth,
-  newHeight,
-  image,
-  setNewWidth,
-  setNewHeight,
-  fileName,
+  file,
+  options,
+  onOptionsChange,
+  convertedImageBlob,
 }: ConvertOptionsProps) {
-  const [selectedFormat, setSelectedFormat] = useState<string>("webp");
   const [maintainRatio, setMaintainRatio] = useState<boolean>(true);
 
-  const convertToFormat = async () => {
-    if (!newWidth || !newHeight) return;
-    const { canvas, canvasContext } = createCanvasFromImage(
-      newWidth,
-      newHeight,
-    );
-    canvasContext.drawImage(image, 0, 0, newWidth, newHeight);
+  const { value: fileSize, unit: fileSizeUnit } = formatBytes(
+    convertedImageBlob.size,
+  );
 
-    const convertedImageBlob = await new Promise<Blob>((resolve, reject) =>
-      canvas.toBlob(
-        (blob) => (blob ? resolve(blob) : reject("Error en conversión")),
-        `image/${selectedFormat}`,
-      ),
-    );
+  // TODO: Mirar de optimizar todo esto (limpiar sobre todo)
+  const sizeChangePercentage = (
+    (convertedImageBlob.size / file.originalSize - 1) *
+    100
+  ).toFixed(0);
+  const isSizeChangeLarger = parseInt(sizeChangePercentage) > 0;
 
-    downloadImage(convertedImageBlob, fileName, selectedFormat);
+  const convertToFormat = () => {
+    downloadImage(convertedImageBlob, file.name, options.selectedFormat);
   };
 
-  const handleNewWidth = (width: number) => {
-    if (maintainRatio && image) {
-      const aspectRatio = image.width / image.height;
-      setNewHeight(Math.round(width / aspectRatio));
+  const handleDimensionChange = (type: "width" | "height", value: number) => {
+    if (maintainRatio && file.img) {
+      const aspectRatio = options.newWidth / options.newHeight;
+
+      if (type === "width") {
+        onOptionsChange({
+          ...options,
+          newHeight: Math.round(value / aspectRatio),
+          newWidth: value,
+        });
+      } else {
+        onOptionsChange({
+          ...options,
+          newWidth: Math.round(value * aspectRatio),
+          newHeight: value,
+        });
+      }
+    } else {
+      onOptionsChange({
+        ...options,
+        newWidth: type === "width" ? value : options.newWidth,
+        newHeight: type === "height" ? value : options.newHeight,
+      });
     }
-    setNewWidth(width);
   };
 
   return (
@@ -58,14 +67,24 @@ export default function ConvertOptions({
       <h2 className="text-2xl font-bold">File Options</h2>
       <div className="flex gap-2">
         <FormatSelector
-          selectedFormat={selectedFormat}
-          setSelectedFormat={setSelectedFormat}
+          selectedFormat={options.selectedFormat}
+          setSelectedFormat={(selectedFormat: string) =>
+            onOptionsChange({ ...options, selectedFormat })
+          }
         />
       </div>
       <div className="flex flex-col gap-2">
         <p className="mb-1 text-xl font-bold">Resize</p>
-        <SizeInput type="Width" value={newWidth!} setValue={handleNewWidth} />
-        <SizeInput type="Height" value={newHeight!} setValue={setNewHeight} />
+        <SizeInput
+          type="Width"
+          value={options.newWidth}
+          setValue={(value) => handleDimensionChange("width", value)}
+        />
+        <SizeInput
+          type="Height"
+          value={options.newHeight}
+          setValue={(value) => handleDimensionChange("height", value)}
+        />
         <label className="mt-1 flex justify-between">
           Maintain aspect ratio
           <input
@@ -76,13 +95,30 @@ export default function ConvertOptions({
           />
         </label>
       </div>
-      <button
-        className="mt-4 ml-auto w-fit rounded-2xl border bg-accent p-4 py-2 font-semibold text-white"
-        onClick={convertToFormat}
-        data-testid="convert-button"
-      >
-        Convert Image
-      </button>
+      {/* TODO: Arreglar todo esto*/}
+      <div className="mt-4 flex w-full items-center">
+        <div className="relative">
+          <span className="rounded-xl bg-gray-200 px-4 py-2 text-xl font-semibold">
+            {fileSize} <span className="text-sm">{fileSizeUnit}</span>
+          </span>
+          <span className="bg-accent absolute -top-4 -right-3 flex items-center gap-0.5 rounded-4xl p-1 text-xs font-semibold text-white">
+            <img
+              src={arrowUp}
+              alt={isSizeChangeLarger ? "Arrow up" : "Arrow Down"}
+              className={`h-2 ${isSizeChangeLarger ? "" : "rotate-180"}`}
+            />
+            {Math.abs(parseInt(sizeChangePercentage))}%
+          </span>
+        </div>
+
+        <button
+          className="bg-accent ml-auto rounded-xl border px-4 py-2 font-semibold text-white"
+          onClick={convertToFormat}
+          data-testid="convert-button"
+        >
+          Convert Image
+        </button>
+      </div>
     </aside>
   );
 }
