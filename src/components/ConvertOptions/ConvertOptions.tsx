@@ -25,7 +25,6 @@ export default function ConvertOptions({
     convertedImageBlob.size,
   );
 
-  // TODO: Mirar de optimizar todo esto (limpiar sobre todo)
   const sizeChangePercentage = (
     (convertedImageBlob.size / file.originalSize - 1) *
     100
@@ -95,7 +94,6 @@ export default function ConvertOptions({
           />
         </label>
       </div>
-      {/* TODO: Arreglar todo esto*/}
       <div className="mt-4 flex w-full items-center">
         <div className="relative">
           <span className="rounded-xl bg-gray-200 px-4 py-2 text-xl font-semibold">

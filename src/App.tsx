@@ -43,7 +43,6 @@ function App() {
 
   return (
     <>
-      {/* TODO: Se pasan muchas variables */}
       <div className="mx-auto my-0 flex flex-col items-center bg-gray-50 text-gray-800">
         {!image ? (
           <LandingPage handleDrop={handleDrop} />
