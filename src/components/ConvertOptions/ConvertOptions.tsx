@@ -3,8 +3,9 @@ import SizeInput from "./SizeInput";
 import { useState } from "react";
 
 import { downloadImage, formatBytes } from "../../utils/imageUtils";
-import arrowUp from "../../assets/up-arrow.svg";
 import type { ConversionOptions, FileData } from "../../types/types";
+import Badge from "../Badge";
+import FileSizeChange from "./FileSizeChange";
 
 type ConvertOptionsProps = {
   file: FileData;
@@ -95,27 +96,23 @@ export default function ConvertOptions({
         </label>
       </div>
       <div className="mt-4 flex w-full items-center">
-        <div className="relative">
-          <span className="rounded-xl bg-gray-200 px-4 py-2 text-xl font-semibold">
-            {fileSize} <span className="text-sm">{fileSizeUnit}</span>
-          </span>
-          <span className="bg-accent absolute -top-4 -right-3 flex items-center gap-0.5 rounded-4xl p-1 text-xs font-semibold text-white">
-            <img
-              src={arrowUp}
-              alt={isSizeChangeLarger ? "Arrow up" : "Arrow Down"}
-              className={`h-2 ${isSizeChangeLarger ? "" : "rotate-180"}`}
-            />
-            {Math.abs(parseInt(sizeChangePercentage))}%
-          </span>
-        </div>
+        <Badge className="relative text-xl" variant="secondary">
+          {fileSize} <span className="text-sm">{fileSizeUnit}</span>
+          <FileSizeChange
+            isLarger={isSizeChangeLarger}
+            percentage={sizeChangePercentage}
+          />
+        </Badge>
 
-        <button
-          className="bg-accent ml-auto rounded-xl border px-4 py-2 font-semibold text-white"
+        <Badge
+          className="ml-auto cursor-pointer"
+          asButton
+          variant="primary"
           onClick={convertToFormat}
-          data-testid="convert-button"
+          data-testid="convert-button-badge"
         >
           Convert Image
-        </button>
+        </Badge>
       </div>
     </aside>
   );
