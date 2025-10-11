@@ -55,9 +55,9 @@ export default function DropZone({
   }, [file.img, options]);
 
   return (
-    <section className="mt-8 flex w-3/4 justify-center gap-8">
+    <section className="mt-8 flex max-w-2xl justify-center gap-8 p-2">
       <main
-        className="flex aspect-square w-full max-w-2xl items-center justify-center rounded-2xl border border-gray-200 p-4 text-center shadow-2xl"
+        className="flex aspect-square w-full items-center justify-center rounded-2xl border border-gray-200 p-4 text-center shadow-2xl"
         onDrop={handleDrop}
         onDragOver={(ev) => {
           ev.preventDefault();
@@ -72,12 +72,12 @@ export default function DropZone({
         convertedImageBlob={convertedImageBlob}
       />
       <button
-        className="absolute top-5 right-5 cursor-pointer"
+        className="absolute top-2 right-2 sm:top-5 sm:right-5 cursor-pointer"
         onClick={() => window.location.reload()}
       >
         <img
           src={cloudSvg}
-          className="h-18 drop-shadow-[0_12px_12px_rgba(0,0,0,0.3)]"
+          className="h-14 md:h-18 drop-shadow-[0_12px_12px_rgba(0,0,0,0.3)]"
           alt="Go to Home Page"
         />
       </button>
