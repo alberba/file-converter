@@ -12,11 +12,11 @@ type LandingPageProps = {
 export default function LandingPage({ handleDrop }: LandingPageProps) {
   return (
     <div
-      className="landing-container mx-auto h-screen max-w-7xl"
+      className="landing-container mx-auto min-h-screen max-w-7xl p-2"
       onDrop={handleDrop}
       onDragOver={(ev) => ev.preventDefault()}
     >
-      <main className="mt-58 flex w-full flex-col items-center gap-16 text-center">
+      <main className="mt-42 flex w-full flex-col items-center gap-32 text-center sm:gap-16">
         <Hero fileInputcallable={handleDrop} />
         <a href="#features-container">
           <ArrowUp className="h-8 rotate-180 animate-bounce text-black" />

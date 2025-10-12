@@ -43,7 +43,7 @@ function App() {
 
   return (
     <>
-      <div className="mx-auto my-0 flex flex-col items-center bg-gray-50 text-gray-800">
+      <div className="my-0 flex w-full flex-col items-center bg-gray-50 text-gray-800">
         {!image ? (
           <LandingPage handleDrop={handleDrop} />
         ) : (

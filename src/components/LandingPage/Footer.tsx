@@ -2,7 +2,7 @@ import Github from "@/assets/github.svg";
 
 export default function Footer() {
   return (
-    <footer className="mt-8 flex w-full items-center justify-between py-4">
+    <footer className="mt-8 px-4 py-6 flex w-full items-center justify-between sm:py-4">
       <span>
         Made with ❤️ by{" "}
         <a className="font-semibold" href="https://github.com/alberba">
