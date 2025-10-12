@@ -1,7 +1,7 @@
 import Feature from "./Feature";
 import Hero from "./Hero";
-import Github from "../assets/github.svg";
 import ArrowUp from "../assets/Arrowup";
+import Footer from "./Footer";
 
 type LandingPageProps = {
   handleDrop: (
@@ -23,12 +23,7 @@ export default function LandingPage({ handleDrop }: LandingPageProps) {
         </a>
         <Feature />
       </main>
-      <footer className="flex w-full items-center justify-between py-4">
-        <span>Made with ❤️ by Albert</span>
-        <a href="https://github.com/alberba/file-converter" target="_blank">
-          <img src={Github} alt="" className="h-8" />
-        </a>
-      </footer>
+      <Footer />
     </div>
   );
 }
