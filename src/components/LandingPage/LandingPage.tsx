@@ -1,6 +1,6 @@
 import Feature from "./Feature";
 import Hero from "./Hero";
-import ArrowUp from "../assets/Arrowup";
+import ArrowUp from "@/assets/ArrowUp";
 import Footer from "./Footer";
 
 type LandingPageProps = {
@@ -19,7 +19,7 @@ export default function LandingPage({ handleDrop }: LandingPageProps) {
       <main className="mt-58 flex w-full flex-col items-center gap-16 text-center">
         <Hero fileInputcallable={handleDrop} />
         <a href="#features-container">
-          <ArrowUp className="h-8 animate-bounce text-black" />
+          <ArrowUp className="h-8 rotate-180 animate-bounce text-black" />
         </a>
         <Feature />
       </main>
