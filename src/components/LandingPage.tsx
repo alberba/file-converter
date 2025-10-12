@@ -1,6 +1,7 @@
 import Feature from "./Feature";
 import Hero from "./Hero";
 import Github from "../assets/github.svg";
+import ArrowUp from "../assets/Arrowup";
 
 type LandingPageProps = {
   handleDrop: (
@@ -15,23 +16,11 @@ export default function LandingPage({ handleDrop }: LandingPageProps) {
       onDrop={handleDrop}
       onDragOver={(ev) => ev.preventDefault()}
     >
-      {/*<Header />*/}
-      <main className="mt-58 flex w-full flex-col items-center gap-8 text-center">
+      <main className="mt-58 flex w-full flex-col items-center gap-16 text-center">
         <Hero fileInputcallable={handleDrop} />
-        <section>
-          <article>
-            <img src="" alt="" />
-            <p className="text-sm text-gray-500">
-              Soportamos JPG, PNG, WEBP y GIF
-            </p>
-          </article>
-          <article>
-            <p>
-              Reescala el tamaño de la imagen a las dimensiones que tu desees
-            </p>
-            <img src="" alt="" />
-          </article>
-        </section>
+        <a href="#features-container">
+          <ArrowUp className="h-8 animate-bounce text-black" />
+        </a>
         <Feature />
       </main>
       <footer className="flex w-full items-center justify-between py-4">
