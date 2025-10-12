@@ -1,4 +1,4 @@
-import feature1 from "@/assets/feat1.png";
+import feature1 from "@/assets/feat1.webp";
 import feature2 from "@/assets/feat2.webp";
 import feature3 from "@/assets/feat3.webp";
 
