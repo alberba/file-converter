@@ -2,87 +2,138 @@ import FormatSelector from "./FormatSelector";
 import SizeInput from "./SizeInput";
 import { useState } from "react";
 
-import {
-  createCanvasFromImage,
-  downloadImage,
-} from "../../utils/imageUtils";
+import { downloadImage, formatBytes } from "../../utils/imageUtils";
+import type { ConversionOptions, FileData } from "../../types/types";
+import Badge from "../Badge";
+import FileSizeChange from "./FileSizeChange";
+
+import arrowDropDown from "../../assets/arrow-prev-up.svg";
 
 type ConvertOptionsProps = {
-  newWidth: number | null;
-  newHeight: number | null;
-  image: HTMLImageElement;
-  setNewWidth: (width: number) => void;
-  setNewHeight: (height: number) => void;
-  fileName: string;
+  file: FileData;
+  options: ConversionOptions;
+  onOptionsChange: (options: ConversionOptions) => void;
+  convertedImageBlob: Blob;
 };
 
 export default function ConvertOptions({
-  newWidth,
-  newHeight,
-  image,
-  setNewWidth,
-  setNewHeight,
-  fileName,
+  file,
+  options,
+  onOptionsChange,
+  convertedImageBlob,
 }: ConvertOptionsProps) {
-  const [selectedFormat, setSelectedFormat] = useState<string>("webp");
   const [maintainRatio, setMaintainRatio] = useState<boolean>(true);
+  const [isOptionsVisible, setOptionsVisible] = useState<boolean>(true);
 
-  const convertToFormat = async () => {
-    if (!newWidth || !newHeight) return;
-    const { canvas, canvasContext } = createCanvasFromImage(
-      newWidth,
-      newHeight,
-    );
-    canvasContext.drawImage(image, 0, 0, newWidth, newHeight);
+  const { value: fileSize, unit: fileSizeUnit } = formatBytes(
+    convertedImageBlob.size,
+  );
 
-    const convertedImageBlob = await new Promise<Blob>((resolve, reject) =>
-      canvas.toBlob(
-        (blob) => (blob ? resolve(blob) : reject("Error en conversión")),
-        `image/${selectedFormat}`,
-      ),
-    );
+  const sizeChangePercentage = (
+    (convertedImageBlob.size / file.originalSize - 1) *
+    100
+  ).toFixed(0);
+  const isSizeChangeLarger = parseInt(sizeChangePercentage) > 0;
 
-    downloadImage(convertedImageBlob, fileName, selectedFormat);
+  const convertToFormat = () => {
+    downloadImage(convertedImageBlob, file.name, options.selectedFormat);
   };
 
-  const handleNewWidth = (width: number) => {
-    if (maintainRatio && image) {
-      const aspectRatio = image.width / image.height;
-      setNewHeight(Math.round(width / aspectRatio));
+  const toggleOptions = () => {
+    setOptionsVisible(!isOptionsVisible);
+  };
+
+  const handleDimensionChange = (type: "width" | "height", value: number) => {
+    if (maintainRatio && file.img) {
+      const aspectRatio = options.newWidth / options.newHeight;
+
+      if (type === "width") {
+        onOptionsChange({
+          ...options,
+          newHeight: Math.round(value / aspectRatio),
+          newWidth: value,
+        });
+      } else {
+        onOptionsChange({
+          ...options,
+          newWidth: Math.round(value * aspectRatio),
+          newHeight: value,
+        });
+      }
+    } else {
+      onOptionsChange({
+        ...options,
+        newWidth: type === "width" ? value : options.newWidth,
+        newHeight: type === "height" ? value : options.newHeight,
+      });
     }
-    setNewWidth(width);
   };
 
   return (
-    <aside className="absolute right-0 bottom-0 m-4 flex w-2xs flex-col gap-4 rounded-3xl border border-gray-200 p-4 shadow-2xl">
-      <h2 className="text-2xl font-bold">File Options</h2>
-      <div className="flex gap-2">
-        <FormatSelector
-          selectedFormat={selectedFormat}
-          setSelectedFormat={setSelectedFormat}
+    <aside
+      className={`absolute right-0 bottom-0 m-4 flex w-2xs flex-col rounded-3xl border border-gray-200 bg-gray-50 p-4 shadow-2xl transition-all duration-500 ${isOptionsVisible ? "gap-4" : "gap-0"}`}
+    >
+      <div className="flex justify-between" onClick={toggleOptions}>
+        <h2 className="text-2xl font-bold">File Options</h2>
+        <img
+          className={`h-8 ${isOptionsVisible ? "-rotate-180" : "rotate-0"} transition-all duration-300`}
+          src={arrowDropDown}
+          alt=""
         />
       </div>
-      <div className="flex flex-col gap-2">
-        <p className="mb-1 text-xl font-bold">Resize</p>
-        <SizeInput type="Width" value={newWidth!} setValue={handleNewWidth} />
-        <SizeInput type="Height" value={newHeight!} setValue={setNewHeight} />
-        <label className="mt-1 flex justify-between">
-          Maintain aspect ratio
-          <input
-            type="checkbox"
-            checked={maintainRatio}
-            onChange={() => setMaintainRatio(!maintainRatio)}
-            className="w-4"
-          />
-        </label>
-      </div>
-      <button
-        className="mt-4 ml-auto w-fit rounded-2xl border bg-accent p-4 py-2 font-semibold text-white"
-        onClick={convertToFormat}
-        data-testid="convert-button"
+      <div
+        className={`flex flex-col gap-4 overflow-hidden transition-all duration-500 ${isOptionsVisible ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}
       >
-        Convert Image
-      </button>
+        <div className="flex gap-2">
+          <FormatSelector
+            selectedFormat={options.selectedFormat}
+            setSelectedFormat={(selectedFormat: string) =>
+              onOptionsChange({ ...options, selectedFormat })
+            }
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <p className="mb-1 text-xl font-bold">Resize</p>
+          <SizeInput
+            type="Width"
+            value={options.newWidth}
+            setValue={(value) => handleDimensionChange("width", value)}
+          />
+          <SizeInput
+            type="Height"
+            value={options.newHeight}
+            setValue={(value) => handleDimensionChange("height", value)}
+          />
+          <label className="mt-1 flex justify-between">
+            Maintain aspect ratio
+            <input
+              type="checkbox"
+              checked={maintainRatio}
+              onChange={() => setMaintainRatio(!maintainRatio)}
+              className="w-4"
+            />
+          </label>
+        </div>
+        <div className="mt-4 flex w-full items-center">
+          <Badge className="relative text-xl" variant="secondary">
+            {fileSize} <span className="text-sm">{fileSizeUnit}</span>
+            <FileSizeChange
+              isLarger={isSizeChangeLarger}
+              percentage={sizeChangePercentage}
+            />
+          </Badge>
+
+          <Badge
+            className="ml-auto cursor-pointer"
+            asButton
+            variant="primary"
+            onClick={convertToFormat}
+            data-testid="convert-button-badge"
+          >
+            Convert Image
+          </Badge>
+        </div>
+      </div>
     </aside>
   );
 }

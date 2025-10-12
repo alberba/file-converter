@@ -1,3 +1,5 @@
+import arrowDropDown from "../../assets/arrow-prev-up.svg";
+
 type FormatSelectorProps = {
   selectedFormat: string;
   setSelectedFormat: (format: string) => void;
@@ -27,19 +29,7 @@ export default function FormatSelector({
         })}
       </select>
       <div className="pointer-events-none absolute right-2">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          fill="none"
-          className="rotate-270"
-          viewBox="0 0 24 24"
-        >
-          <path
-            fill="#0F0F0F"
-            d="M14.29 5.7a1 1 0 0 0-1.41 0l-4.9 4.9a2 2 0 0 0 0 2.83l4.9 4.89a1 1 0 0 0 1.41-1.42l-4.18-4.18a1 1 0 0 1 0-1.42l4.18-4.18a1 1 0 0 0 0-1.41Z"
-          />
-        </svg>
+        <img className="h-6 -rotate-180" src={arrowDropDown} alt="" />
       </div>
     </div>
   );
