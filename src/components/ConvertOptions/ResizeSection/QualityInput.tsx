@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { type ConversionOptions } from "@/types/types";
+import InputBase from "./InputBase";
 
 type QualityInputProps = {
   options: ConversionOptions;
@@ -13,10 +14,10 @@ export default function QualityInput({
   const [tempQuality, setTempQuality] = useState<number>(options.quality);
 
   return (
-    <label className="flex items-center justify-between gap-12">
-      Quality:
-      <div className="flex gap-2">
+    <InputBase title="Quality">
+      <div className="flex w-full gap-2">
         <input
+          className="w-full"
           type="range"
           value={tempQuality}
           min="0"
@@ -36,10 +37,8 @@ export default function QualityInput({
             })
           }
         />
-        <span className="w-8 text-sm">
-          {Math.round(options.quality * 100)}%
-        </span>
+        <span className="text-sm">{Math.round(tempQuality * 100)}%</span>
       </div>
-    </label>
+    </InputBase>
   );
 }
