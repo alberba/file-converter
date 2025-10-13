@@ -9,7 +9,7 @@ export default function FormatSelector({
   selectedFormat,
   setSelectedFormat,
 }: FormatSelectorProps) {
-  const formats = ["png", "jpg", "webp", "gif"];
+  const formats = ["png", "jpg", "webp"];
 
   return (
     <div className="relative flex w-full items-center justify-between gap-2">
