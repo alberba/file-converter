@@ -30,6 +30,24 @@ export function resizeCanvas(
   canvas.height = newHeight;
 }
 
+export function convertCanvasToBlob(
+  canvas: HTMLCanvasElement,
+  format: string,
+  quality: number,
+): Promise<Blob> {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => {
+        if (blob) {
+          resolve(blob);
+        } else reject(new Error("Blob conversion failed"));
+      },
+      format,
+      quality,
+    );
+  });
+}
+
 export function loadImageAsDataURL(file: File) {
   return new Promise<string>((resolve, reject) => {
     const reader = new FileReader();

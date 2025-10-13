@@ -1,4 +1,4 @@
-import Feature from "./Feature";
+import FeatureSection from "./FeatureSection";
 import Hero from "./Hero";
 import ArrowUp from "@/assets/ArrowUp";
 import Footer from "./Footer";
@@ -12,7 +12,7 @@ type LandingPageProps = {
 export default function LandingPage({ handleDrop }: LandingPageProps) {
   return (
     <div
-      className="landing-container w-full min-h-screen py-2"
+      className="landing-container min-h-screen w-full py-2"
       onDrop={handleDrop}
       onDragOver={(ev) => ev.preventDefault()}
     >
@@ -22,7 +22,7 @@ export default function LandingPage({ handleDrop }: LandingPageProps) {
           <a href="#features-container">
             <ArrowUp className="h-8 rotate-180 animate-bounce text-black" />
           </a>
-          <Feature />
+          <FeatureSection />
         </main>
         <Footer />
       </div>

@@ -1,9 +1,14 @@
-import { useCallback, useEffect, useRef, useState } from "react";
 import ConvertOptions from "./ConvertOptions/ConvertOptions";
-import cloudSvg from "@/assets/cloud.svg";
+import {
+  drawCanvas,
+  fileToImage,
+  resizeCanvas,
+  convertCanvasToBlob,
+} from "@/utils/imageUtils";
 import type { ConversionOptions, FileData } from "@/types/types";
+import cloudSvg from "@/assets/cloud.svg";
 
-import { drawCanvas, fileToImage, resizeCanvas } from "@/utils/imageUtils";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type DropZoneProps = {
   handleDrop: (dragEvent: React.DragEvent<HTMLElement>) => Promise<void>;
@@ -32,24 +37,6 @@ export default function DropZone({
     },
     [],
   );
-
-  const convertCanvasToBlob = (
-    canvas: HTMLCanvasElement,
-    format: string,
-    quality: number,
-  ): Promise<Blob> => {
-    return new Promise((resolve, reject) => {
-      canvas.toBlob(
-        (blob) => {
-          if (blob) {
-            resolve(blob);
-          } else reject(new Error("Blob conversion failed"));
-        },
-        format,
-        quality,
-      );
-    });
-  };
 
   useEffect(() => {
     if (!file.img || !canvasRef.current) return;
