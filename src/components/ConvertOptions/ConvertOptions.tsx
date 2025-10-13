@@ -71,7 +71,7 @@ export default function ConvertOptions({
 
   return (
     <aside
-      className={`absolute right-0 bottom-0 m-4 flex w-2xs flex-col rounded-3xl border border-gray-200 bg-gray-50 p-4 shadow-2xl transition-all duration-500 ${isOptionsVisible ? "gap-4" : "gap-0"}`}
+      className={`absolute right-0 bottom-0 m-4 flex w-76 flex-col rounded-3xl border border-gray-200 bg-gray-50 p-4 shadow-2xl transition-all duration-500 ${isOptionsVisible ? "gap-4" : "gap-0"}`}
     >
       <div className="flex justify-between" onClick={toggleOptions}>
         <h2 className="text-2xl font-bold">File Options</h2>
@@ -114,7 +114,7 @@ export default function ConvertOptions({
             />
           </label>
         </div>
-        <div className="mt-4 flex w-full items-center">
+        <div className="mt-4 flex w-full items-center gap-3">
           <Badge className="relative text-xl" variant="secondary">
             {fileSize} <span className="text-sm">{fileSizeUnit}</span>
             <FileSizeChange
