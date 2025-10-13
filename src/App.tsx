@@ -33,7 +33,7 @@ function App() {
     }
 
     if (!file) return;
-    setFileName(file.name);
+    setFileName(file.name.slice(0, file.name.lastIndexOf(".")) || file.name);
     setFileSize(file.size);
 
     const img = await fileToImage(file);
