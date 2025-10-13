@@ -63,7 +63,7 @@ export default function DropZone({
           ev.preventDefault();
         }}
       >
-        <canvas ref={canvasRef} className="w-full h-158" />
+        <canvas ref={canvasRef} className="w-full" />
       </main>
       <ConvertOptions
         file={file}
