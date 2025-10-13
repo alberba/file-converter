@@ -1,4 +1,4 @@
-import arrowDropDown from "../../assets/arrow-prev-up.svg";
+import arrowDropDown from "@/assets/arrow-prev-up.svg";
 
 type FormatSelectorProps = {
   selectedFormat: string;

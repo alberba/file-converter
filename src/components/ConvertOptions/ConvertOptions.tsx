@@ -4,8 +4,8 @@ import FileSizeChange from "./FileSizeChange";
 import Badge from "../Badge";
 import arrowDropDown from "@/assets/arrow-prev-up.svg";
 
-import { downloadImage, formatBytes } from "../../utils/imageUtils";
-import type { ConversionOptions, FileData } from "../../types/types";
+import { downloadImage, formatBytes } from "@/utils/imageUtils";
+import type { ConversionOptions, FileData } from "@/types/types";
 
 import { useState } from "react";
 

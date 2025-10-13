@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import ConvertOptions from "./ConvertOptions/ConvertOptions";
-import cloudSvg from "../assets/cloud.svg";
-import type { ConversionOptions, FileData } from "../types/types";
+import cloudSvg from "@/assets/cloud.svg";
+import type { ConversionOptions, FileData } from "@/types/types";
 
-import { drawCanvas, fileToImage, resizeCanvas } from "../utils/imageUtils";
+import { drawCanvas, fileToImage, resizeCanvas } from "@/utils/imageUtils";
 
 type DropZoneProps = {
   handleDrop: (dragEvent: React.DragEvent<HTMLElement>) => Promise<void>;
