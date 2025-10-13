@@ -48,10 +48,16 @@ export default function DropZone({
     );
     if (!imageCanvas) return;
 
-    imageCanvas.toBlob((blob) => {
-      if (blob) setConvertedImageBlob(blob);
-      else console.error("Blob conversion failed");
-    }, `image/${options.selectedFormat}`);
+    const quality = options.selectedFormat === "jpeg" ? 0.8 : undefined;
+
+    imageCanvas.toBlob(
+      (blob) => {
+        if (blob) setConvertedImageBlob(blob);
+        else console.error("Blob conversion failed");
+      },
+      `image/${options.selectedFormat}`,
+      quality,
+    );
   }, [file.img, options]);
 
   return (
@@ -72,12 +78,12 @@ export default function DropZone({
         convertedImageBlob={convertedImageBlob}
       />
       <button
-        className="absolute top-2 right-2 sm:top-5 sm:right-5 cursor-pointer"
+        className="absolute top-2 right-2 cursor-pointer sm:top-5 sm:right-5"
         onClick={() => window.location.reload()}
       >
         <img
           src={cloudSvg}
-          className="h-14 md:h-18 drop-shadow-[0_12px_12px_rgba(0,0,0,0.3)]"
+          className="h-14 drop-shadow-[0_12px_12px_rgba(0,0,0,0.3)] md:h-18"
           alt="Go to Home Page"
         />
       </button>
