@@ -14,10 +14,12 @@ function App() {
     newWidth: number;
     newHeight: number;
     selectedFormat: string;
+    quality: number;
   }>({
     newWidth: 0,
     newHeight: 0,
     selectedFormat: "webp",
+    quality: 0.8,
   });
 
   const handleDrop = async (

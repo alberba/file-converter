@@ -4,7 +4,7 @@ export function getFileInfo(file: File) {
   return { name, extension };
 }
 
-export function fileToImage(file: File): Promise<HTMLImageElement> {
+export function fileToImage(file: File | Blob): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => resolve(img);
@@ -13,14 +13,21 @@ export function fileToImage(file: File): Promise<HTMLImageElement> {
   });
 }
 
-export function createCanvasFromImage(newWidth: number, newHeight: number) {
-  const canvas = document.createElement("canvas");
+export function drawCanvas(canvas: HTMLCanvasElement, img: HTMLImageElement) {
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+}
+
+export function resizeCanvas(
+  canvas: HTMLCanvasElement,
+  newWidth: number,
+  newHeight: number,
+) {
   canvas.width = newWidth;
   canvas.height = newHeight;
-  const canvasContext = canvas.getContext("2d");
-  if (!canvasContext)
-    throw new Error("No se pudo obtener el contexto del canvas");
-  return { canvas, canvasContext };
 }
 
 export function loadImageAsDataURL(file: File) {

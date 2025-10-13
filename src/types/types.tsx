@@ -8,4 +8,5 @@ export interface ConversionOptions {
   newWidth: number;
   newHeight: number;
   selectedFormat: string;
+  quality: number;
 }

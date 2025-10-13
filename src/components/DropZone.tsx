@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import ConvertOptions from "./ConvertOptions/ConvertOptions";
 import cloudSvg from "../assets/cloud.svg";
 import type { ConversionOptions, FileData } from "../types/types";
+
+import { drawCanvas, fileToImage, resizeCanvas } from "../utils/imageUtils";
 
 type DropZoneProps = {
   handleDrop: (dragEvent: React.DragEvent<HTMLElement>) => Promise<void>;
@@ -21,44 +23,55 @@ export default function DropZone({
     new Blob(),
   );
 
-  const resizeAndRenderCanvas = (
+  const createCanvasPreview = useCallback(
+    (blob: Blob, canvas: HTMLCanvasElement) => {
+      fileToImage(blob).then((previewImg) => {
+        drawCanvas(canvas, previewImg);
+        URL.revokeObjectURL(previewImg.src);
+      });
+    },
+    [],
+  );
+
+  const convertCanvasToBlob = (
     canvas: HTMLCanvasElement,
-    img: HTMLImageElement,
-    newWidth: number,
-    newHeight: number,
-  ): HTMLCanvasElement | null => {
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return null;
-
-    canvas.width = newWidth;
-    canvas.height = newHeight;
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-    return canvas;
+    format: string,
+    quality: number,
+  ): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+      canvas.toBlob(
+        (blob) => {
+          if (blob) {
+            resolve(blob);
+          } else reject(new Error("Blob conversion failed"));
+        },
+        format,
+        quality,
+      );
+    });
   };
 
   useEffect(() => {
     if (!file.img || !canvasRef.current) return;
 
-    const imageCanvas = resizeAndRenderCanvas(
-      canvasRef.current,
-      file.img,
-      options.newWidth,
-      options.newHeight,
-    );
+    const imageCanvas = canvasRef.current;
+    resizeCanvas(imageCanvas, options.newWidth, options.newHeight);
+    drawCanvas(canvasRef.current, file.img);
+
     if (!imageCanvas) return;
 
-    const quality = options.selectedFormat === "jpeg" ? 0.8 : undefined;
-
-    imageCanvas.toBlob(
-      (blob) => {
-        if (blob) setConvertedImageBlob(blob);
-        else console.error("Blob conversion failed");
-      },
+    convertCanvasToBlob(
+      imageCanvas,
       `image/${options.selectedFormat}`,
-      quality,
-    );
-  }, [file.img, options]);
+      options.quality,
+    )
+      .then((blob) => {
+        setConvertedImageBlob(blob);
+        if (options.selectedFormat !== "png")
+          createCanvasPreview(blob, imageCanvas);
+      })
+      .catch((error) => console.error(error));
+  }, [file.img, options, createCanvasPreview]);
 
   return (
     <section className="mt-8 flex max-w-2xl justify-center gap-8 p-2">
