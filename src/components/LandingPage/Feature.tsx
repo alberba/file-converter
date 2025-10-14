@@ -14,7 +14,7 @@ export default function Feature({
 
   return (
     <section
-      className={`mx-8 flex max-w-lg flex-col items-center gap-4 md:m-0 lg:absolute lg:max-w-4xl ${alignmentClasses[alignment]} ${sectionClasses}`}
+      className={`mx-8 flex max-w-lg flex-col items-center gap-4 xl:m-0 lg:absolute lg:max-w-4xl ${alignmentClasses[alignment]} ${sectionClasses}`}
     >
       <img
         src={image.src}
