@@ -9,7 +9,7 @@ import type { ConversionOptions, FileData } from "@/types/types";
 import cloudSvg from "@/assets/cloud.svg";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import MessageFadeIn from "./MessageFadeIn";
+import MessageFadeIn from "@/components/MessageFadeIn";
 import ImageContainer from "./ImageContainer";
 
 type DropZoneProps = {

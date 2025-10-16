@@ -1,7 +1,7 @@
 import FormatSelector from "./FormatSelector";
 import ResizeSection from "./ResizeSection/ResizeSection";
 import FileSizeChange from "./FileSizeChange";
-import Badge from "../Badge";
+import Badge from "@/components/Badge";
 import arrowDropDown from "@/assets/arrow-prev-up.svg";
 
 import { downloadImage, formatBytes } from "@/utils/imageUtils";

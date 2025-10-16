@@ -1,6 +1,6 @@
 import "./App.css";
-import DropZone from "./components/DropZone";
-import LandingPage from "./components/LandingPage/LandingPage";
+import DropZone from "./pages/DropZone/DropZone";
+import LandingPage from "./pages/LandingPage/LandingPage";
 
 import { fileToImage } from "./utils/imageUtils";
 import { useState } from "react";
