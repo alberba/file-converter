@@ -14,7 +14,7 @@ export default defineConfig({
   test: {
     globals: true, // <--- necesario para tener "expect" global
     environment: "jsdom", // <--- necesario para React Testing Library
-    setupFiles: "./setupTests.ts",
+    setupFiles: path.resolve(__dirname, "./src/setupTests.ts"),
     coverage: {
       include: ["src/**/*.{ts,tsx}"],
       exclude: ["src/utils/imageUtils.ts", "src/main.tsx", "src/vite-env.d.ts"], // Excluir el archivo de utilidades de imagen
