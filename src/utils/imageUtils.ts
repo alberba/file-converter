@@ -1,9 +1,3 @@
-export function getFileInfo(file: File) {
-  const name = file.name.split(".")[0];
-  const extension = file.name.split(".").pop()?.toUpperCase() ?? "";
-  return { name, extension };
-}
-
 export function fileToImage(file: File | Blob): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -45,21 +39,6 @@ export function convertCanvasToBlob(
       format,
       quality,
     );
-  });
-}
-
-export function loadImageAsDataURL(file: File) {
-  return new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      if (e.target?.result) {
-        resolve(e.target.result as string);
-      } else {
-        reject("No se pudo leer la imagen");
-      }
-    };
-    reader.onerror = () => reject("Error al leer el archivo");
-    reader.readAsDataURL(file);
   });
 }
 
