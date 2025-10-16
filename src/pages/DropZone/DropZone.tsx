@@ -72,6 +72,7 @@ export default function DropZone({
         onDragOver={(ev) => {
           ev.preventDefault();
         }}
+        data-testid="drop-zone"
       >
         <ImageContainer
           originalFileURL={originalFileURL}
