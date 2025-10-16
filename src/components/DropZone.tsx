@@ -9,16 +9,20 @@ import type { ConversionOptions, FileData } from "@/types/types";
 import cloudSvg from "@/assets/cloud.svg";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import MessageFadeIn from "./MessageFadeIn";
+import ImageContainer from "./ImageContainer";
 
 type DropZoneProps = {
   handleDrop: (dragEvent: React.DragEvent<HTMLElement>) => Promise<void>;
   file: FileData;
+  originalFileURL: string;
   options: ConversionOptions;
   onOptionsChange: (options: ConversionOptions) => void;
 };
 
 export default function DropZone({
   file,
+  originalFileURL,
   handleDrop,
   options,
   onOptionsChange,
@@ -69,8 +73,13 @@ export default function DropZone({
           ev.preventDefault();
         }}
       >
-        <canvas ref={canvasRef} className="w-full" />
+        <ImageContainer
+          originalFileURL={originalFileURL}
+          canvasRef={canvasRef}
+        />
       </main>
+      <MessageFadeIn />
+
       <ConvertOptions
         file={file}
         options={options}

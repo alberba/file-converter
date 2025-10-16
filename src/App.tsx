@@ -9,6 +9,7 @@ function App() {
   const [image, setImage] = useState<HTMLImageElement | null>(null);
   const [fileName, setFileName] = useState<string>("");
   const [fileSize, setFileSize] = useState<number>(0);
+  const [originalFileURL, setOriginalFileURL] = useState<string | null>(null);
 
   const [options, setOptions] = useState<{
     newWidth: number;
@@ -38,6 +39,9 @@ function App() {
     setFileName(file.name.slice(0, file.name.lastIndexOf(".")) || file.name);
     setFileSize(file.size);
 
+    URL.revokeObjectURL(originalFileURL || "");
+    setOriginalFileURL(URL.createObjectURL(file));
+
     const img = await fileToImage(file);
     setImage(img);
     setOptions({ ...options, newWidth: img.width, newHeight: img.height });
@@ -51,6 +55,7 @@ function App() {
         ) : (
           <DropZone
             file={{ name: fileName, img: image, originalSize: fileSize }}
+            originalFileURL={originalFileURL!}
             options={options}
             onOptionsChange={setOptions}
             handleDrop={handleDrop}
