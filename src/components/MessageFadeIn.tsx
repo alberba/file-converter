@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 
 import crossSvg from "@/assets/cross.svg";
 
+export const MESSAGE_DELAY = 4000;
+
 export default function MessageFadeIn() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setShow(true);
-    }, 4000);
+    }, MESSAGE_DELAY);
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.code === "Space") {
@@ -26,12 +28,17 @@ export default function MessageFadeIn() {
 
   return (
     <span
+      data-testid="message-fade-in"
       className={`fixed bottom-0 z-10 rounded-xl bg-black/50 px-2 py-1 font-semibold text-white transition-all duration-700 ${show ? "-translate-y-3 opacity-100" : "translate-y-12 opacity-0"}`}
     >
       <span className="hidden md:inline">
         Presiona o mantén el espacio para ver la imagen original
       </span>
-      <span className="md:hidden flex items-center gap-2" onTouchStart={() => setShow(false)}>
+      <span
+        data-testid="message-fade-in-mobile"
+        className="flex items-center gap-2 md:hidden"
+        onTouchStart={() => setShow(false)}
+      >
         Presiona la imagen para ver los cambios
         <img src={crossSvg} alt="Boton para cerrar" className="h-4" />
       </span>
