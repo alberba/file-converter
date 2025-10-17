@@ -1,14 +1,13 @@
 import "./App.css";
 import DropZone from "./pages/DropZone/DropZone";
 import LandingPage from "./pages/LandingPage/LandingPage";
+import type { FileData } from "./types/types";
 
-import { fileToImage } from "./utils/imageUtils";
+import { fileToImage, removeExtFromFileName } from "./utils/imageUtils";
 import { useState } from "react";
 
 function App() {
-  const [image, setImage] = useState<HTMLImageElement | null>(null);
-  const [fileName, setFileName] = useState<string>("");
-  const [fileSize, setFileSize] = useState<number>(0);
+  const [file, setFile] = useState<FileData | null>(null);
   const [originalFileURL, setOriginalFileURL] = useState<string | null>(null);
 
   const [options, setOptions] = useState<{
@@ -36,25 +35,27 @@ function App() {
     }
 
     if (!file) return;
-    setFileName(file.name.slice(0, file.name.lastIndexOf(".")) || file.name);
-    setFileSize(file.size);
 
     URL.revokeObjectURL(originalFileURL || "");
     setOriginalFileURL(URL.createObjectURL(file));
 
     const img = await fileToImage(file);
-    setImage(img);
+    setFile({
+      name: removeExtFromFileName(file.name),
+      img,
+      originalSize: file.size,
+    });
     setOptions({ ...options, newWidth: img.width, newHeight: img.height });
   };
 
   return (
     <>
       <div className="my-0 flex w-full flex-col items-center bg-gray-50 text-gray-800">
-        {!image ? (
+        {!file ? (
           <LandingPage handleDrop={handleDrop} />
         ) : (
           <DropZone
-            file={{ name: fileName, img: image, originalSize: fileSize }}
+            file={file}
             originalFileURL={originalFileURL!}
             options={options}
             onOptionsChange={setOptions}
