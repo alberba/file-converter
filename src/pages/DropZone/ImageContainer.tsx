@@ -45,14 +45,14 @@ export default function ImageContainer({
       onTouchEnd={handlePressEnd}
       className="relative flex h-full w-full items-center"
     >
-      <canvas ref={canvasRef} className="w-full" />
+      <canvas ref={canvasRef} className={`w-full h-full object-contain ${showOriginal ? "hidden": ""}`} />
       {showOriginal && (
         <div>
           <span className="bg-accent absolute top-2 right-2 z-10 rounded-lg px-3 py-1 font-semibold text-white">
             Original Image
           </span>
           <img
-            className="absolute top-0 right-0 w-full"
+            className="absolute top-0 right-0 w-full h-full object-contain"
             src={originalFileURL}
           />
         </div>
