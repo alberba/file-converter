@@ -50,7 +50,7 @@ function App() {
 
   return (
     <>
-      <div className="my-0 flex w-full flex-col items-center bg-gray-50 text-gray-800">
+      <div className="my-0 flex w-full min-h-screen flex-col items-center bg-gray-50 text-gray-800">
         {!file ? (
           <LandingPage handleDrop={handleDrop} />
         ) : (

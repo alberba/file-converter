@@ -65,7 +65,7 @@ export default function DropZone({
   }, [file.img, options, createCanvasPreview]);
 
   return (
-    <section className="mt-8 flex max-w-2xl justify-center gap-8 p-2">
+    <section className="my-auto flex w-full self-center max-w-lg md:max-w-full md:w-xl lg:w-2xl justify-center gap-8 p-2">
       <main
         className="flex aspect-square w-full items-center justify-center rounded-2xl border border-gray-200 p-4 text-center shadow-2xl"
         onDrop={handleDrop}
