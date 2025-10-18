@@ -67,7 +67,7 @@ export default function ConvertOptions({
           fileData={file}
         />
         <div className="mt-4 flex w-full items-center gap-3">
-          <Badge className="relative text-xl" variant="secondary">
+          <Badge className="relative text-lg" variant="secondary">
             {fileSize} <span className="text-sm">{fileSizeUnit}</span>
             <FileSizeChange
               isLarger={isSizeChangeLarger}
