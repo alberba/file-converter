@@ -42,7 +42,7 @@ export default function ConvertOptions({
     <aside
       className={`absolute right-0 bottom-0 m-4 flex w-76 flex-col rounded-3xl border border-gray-200 bg-gray-50 p-4 shadow-2xl transition-all duration-500 ${isOptionsVisible ? "gap-4" : "gap-0"}`}
     >
-      <div className="flex justify-between" onClick={toggleOptionsDisplay}>
+      <div className="flex justify-between" onClick={toggleOptionsDisplay} data-testid="convert-options-header">
         <h2 className="text-2xl font-bold">File Options</h2>
         <img
           className={`h-8 ${isOptionsVisible ? "-rotate-180" : "rotate-0"} transition-all duration-300`}
@@ -52,6 +52,7 @@ export default function ConvertOptions({
       </div>
       <div
         className={`flex flex-col gap-4 overflow-hidden transition-all duration-500 ${isOptionsVisible ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}
+        data-testid="convert-options-content"
       >
         <div className="flex gap-2">
           <FormatSelector
