@@ -22,17 +22,23 @@ function App() {
     quality: 0.8,
   });
 
+  const getFilefromEvent = (
+    event: React.DragEvent<HTMLElement> | React.FormEvent<HTMLElement>,
+  ): File | null => {
+    if ("dataTransfer" in event) {
+      event.preventDefault();
+      return event.dataTransfer.files[0];
+    } else {
+      const input = event.target as HTMLInputElement;
+      return input.files?.[0] || null;
+    }
+  };
+
   const handleDrop = async (
     event: React.DragEvent<HTMLElement> | React.FormEvent<HTMLElement>,
   ) => {
     let file: File | null = null;
-    if ("dataTransfer" in event) {
-      event.preventDefault();
-      file = event.dataTransfer.files[0];
-    } else {
-      const input = event.target as HTMLInputElement;
-      file = input.files?.[0] || null;
-    }
+    file = getFilefromEvent(event);
 
     if (!file) return;
 
