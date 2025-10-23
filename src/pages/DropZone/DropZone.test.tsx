@@ -2,6 +2,7 @@ import { render, waitFor } from "@testing-library/react";
 import { vi } from "vitest";
 import { convertCanvasToBlob, fileToImage } from "@/utils/imageUtils";
 import DropZone from "./DropZone";
+import { createMockFileData } from "@/testUtils/mocks";
 
 vi.mock("@/utils/imageUtils", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@/utils/imageUtils")>();
@@ -17,16 +18,12 @@ vi.mock("@/utils/imageUtils", async (importOriginal) => {
 describe("DropZone Component", () => {
   const mockBlobJpeg = new Blob(["mock"], { type: "image/jpeg" });
   const mockBlobPng = new Blob(["mock"], { type: "image/png" });
-  const mockImg = { src: "blob:mock" } as HTMLImageElement;
 
   const mockedFileToImage = vi.mocked(fileToImage);
   const mockedConvertCanvasToBlob = vi.mocked(convertCanvasToBlob);
 
-  const mockFileData = {
-    name: "test-image",
-    img: mockImg,
-    originalSize: 1024,
-  };
+  const mockFileData = createMockFileData();
+  const mockImg = mockFileData.img;
 
   const baseOptions = {
     newWidth: 100,
