@@ -1,14 +1,13 @@
 import "./App.css";
 import DropZone from "./pages/DropZone/DropZone";
 import LandingPage from "./pages/LandingPage/LandingPage";
+import type { FileData } from "./types/types";
 
-import { fileToImage } from "./utils/imageUtils";
+import { fileToImage, removeExtFromFileName } from "./utils/imageUtils";
 import { useState } from "react";
 
 function App() {
-  const [image, setImage] = useState<HTMLImageElement | null>(null);
-  const [fileName, setFileName] = useState<string>("");
-  const [fileSize, setFileSize] = useState<number>(0);
+  const [file, setFile] = useState<FileData | null>(null);
   const [originalFileURL, setOriginalFileURL] = useState<string | null>(null);
 
   const [options, setOptions] = useState<{
@@ -23,38 +22,46 @@ function App() {
     quality: 0.8,
   });
 
+  const getFilefromEvent = (
+    event: React.DragEvent<HTMLElement> | React.FormEvent<HTMLElement>,
+  ): File | null => {
+    if ("dataTransfer" in event) {
+      event.preventDefault();
+      return event.dataTransfer.files[0];
+    } else {
+      const input = event.target as HTMLInputElement;
+      return input.files?.[0] || null;
+    }
+  };
+
   const handleDrop = async (
     event: React.DragEvent<HTMLElement> | React.FormEvent<HTMLElement>,
   ) => {
     let file: File | null = null;
-    if ("dataTransfer" in event) {
-      event.preventDefault();
-      file = event.dataTransfer.files[0];
-    } else {
-      const input = event.target as HTMLInputElement;
-      file = input.files?.[0] || null;
-    }
+    file = getFilefromEvent(event);
 
     if (!file) return;
-    setFileName(file.name.slice(0, file.name.lastIndexOf(".")) || file.name);
-    setFileSize(file.size);
 
     URL.revokeObjectURL(originalFileURL || "");
     setOriginalFileURL(URL.createObjectURL(file));
 
     const img = await fileToImage(file);
-    setImage(img);
+    setFile({
+      name: removeExtFromFileName(file.name),
+      img,
+      originalSize: file.size,
+    });
     setOptions({ ...options, newWidth: img.width, newHeight: img.height });
   };
 
   return (
     <>
       <div className="my-0 flex w-full min-h-screen flex-col items-center bg-gray-50 text-gray-800">
-        {!image ? (
+        {!file ? (
           <LandingPage handleDrop={handleDrop} />
         ) : (
           <DropZone
-            file={{ name: fileName, img: image, originalSize: fileSize }}
+            file={file}
             originalFileURL={originalFileURL!}
             options={options}
             onOptionsChange={setOptions}

@@ -7,6 +7,8 @@ export default function ArrowUp({ className }: ArrowUpProps) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
+      role="img"
+      aria-label="Flecha desplegable"
       viewBox="0 0 16.2 17"
       className={className}
     >

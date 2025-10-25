@@ -15,6 +15,7 @@ export default function LandingPage({ handleDrop }: LandingPageProps) {
       className="landing-container min-h-screen w-full py-2"
       onDrop={handleDrop}
       onDragOver={(ev) => ev.preventDefault()}
+      data-testid="landing-container"
     >
       <div className="mx-auto max-w-5xl">
         <main className="mt-42 flex w-full flex-col items-center gap-32 text-center sm:gap-16">

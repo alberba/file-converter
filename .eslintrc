@@ -23,4 +23,7 @@
     "simple-import-sort/imports": "warn",
     "sonarjs/cognitive-complexity": ["warn", 15],
   },
+  "globals": {
+    "vi": true,
+  },
 }

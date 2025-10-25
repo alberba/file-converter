@@ -14,11 +14,12 @@ export default function QualityInput({
   const [tempQuality, setTempQuality] = useState<number>(options.quality);
 
   return (
-    <InputBase title="Quality">
+    <InputBase title="Quality" htmlFor="quality-input">
       <div className="flex w-full gap-2">
         <input
           className="w-full"
           type="range"
+          id="quality-input"
           value={tempQuality}
           min="0"
           max="1"

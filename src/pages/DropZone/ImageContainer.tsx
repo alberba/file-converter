@@ -54,6 +54,7 @@ export default function ImageContainer({
           <img
             className="absolute top-0 right-0 w-full h-full object-contain"
             src={originalFileURL}
+            data-testid="original-image"
           />
         </div>
       )}

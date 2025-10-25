@@ -72,3 +72,9 @@ export function formatBytes(
     unit: sizes[i],
   };
 }
+
+export function removeExtFromFileName(fileName: string): string {
+  const lastDotIndex = fileName.lastIndexOf(".");
+  if (lastDotIndex === -1) return fileName;
+  return fileName.slice(0, lastDotIndex);
+}
