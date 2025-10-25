@@ -10,6 +10,9 @@ describe("ResizeSection Component", () => {
   const options = createMockConversionOptions();
   const file = createMockFileData();
   const onOptionsChange = vi.fn();
+  let widthInput: HTMLElement;
+  let heightInput: HTMLElement;
+
   beforeEach(() => {
     render(
       <ResizeSection
@@ -22,10 +25,10 @@ describe("ResizeSection Component", () => {
 
   it("should render without crashing", () => {
     expect(
-      screen.getByRole("spinbutton", { name: "Width:" }),
+      screen.getByRole("spinbutton", { name: "Width" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("spinbutton", { name: "Height:" }),
+      screen.getByRole("spinbutton", { name: "Height" }),
     ).toBeInTheDocument();
   });
 
@@ -33,12 +36,17 @@ describe("ResizeSection Component", () => {
     const NEW_WIDTH = 40;
     const NEW_HEIGHT = 30;
 
-    const widthInput = screen.getByRole("spinbutton", { name: "Width:" });
-    const heightInput = screen.getByRole("spinbutton", { name: "Height:" });
-    const maintainRatioCheckbox = screen.getByRole("checkbox");
+    let maintainRatioCheckbox: HTMLElement;
 
-    expect(widthInput).toHaveValue(options.newWidth);
-    expect(heightInput).toHaveValue(options.newHeight);
+    beforeEach(() => {
+      widthInput = screen.getByRole("spinbutton", { name: "Width" });
+      heightInput = screen.getByRole("spinbutton", { name: "Height" });
+
+      maintainRatioCheckbox = screen.getByRole("checkbox");
+
+      expect(widthInput).toHaveValue(options.newWidth);
+      expect(heightInput).toHaveValue(options.newHeight);
+    });
 
     it("without maintain ratio", () => {
       act(() => {
