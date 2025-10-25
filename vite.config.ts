@@ -17,7 +17,7 @@ export default defineConfig({
     setupFiles: path.resolve(__dirname, "./src/setupTests.ts"),
     coverage: {
       include: ["src/**/*.{ts,tsx}"],
-      exclude: ["src/utils/imageUtils.ts", "src/main.tsx", "src/vite-env.d.ts"], // Excluir el archivo de utilidades de imagen
+      exclude: ["src/types/types.ts", "src/main.tsx", "src/vite-env.d.ts"], // Excluir el archivo de utilidades de imagen
     },
   },
 });
