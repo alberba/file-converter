@@ -11,48 +11,31 @@ vi.spyOn(imageUtils, "fileToImage").mockImplementation(async () => {
 });
 
 describe("App", () => {
-  it("muestra la LandingPage inicialmente", () => {
-    render(<App />);
+  let input: HTMLInputElement;
 
+  beforeEach(() => {
+    render(<App />);
+    input = screen.getByTestId("file-input") as HTMLInputElement;
+  });
+
+  it("muestra la LandingPage inicialmente", () => {
     expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
   });
 
   describe("cuando se sube una imagen", () => {
-    it("muestra el componente DropZone", async () => {
-      render(<App />);
-
-      const file = new File(["(⌐□_□)"], "chucknorris.png", {
-        type: "image/png",
-      });
-
-      const input = screen.getByTestId("file-input") as HTMLInputElement;
-
-      fireEvent.change(input, { target: { files: [file] } });
-
-      const dropZone = await screen.findByTestId("drop-zone");
-
-      expect(dropZone).toBeInTheDocument();
+    const file = new File(["(⌐□_□)"], "chucknorris.png", {
+      type: "image/png",
     });
-
+    
     it("procesa correctamente un archivo seleccionado via input", async () => {
-      render(<App />);
-
-      const file = new File(["(⌐□_□)"], "chucknorris.png", {
-        type: "image/png",
-      });
-      const input = screen.getByTestId("file-input") as HTMLInputElement;
       fireEvent.change(input, { target: { files: [file] } });
-      const dropZone = await screen.findByTestId("drop-zone");
+      const dropZone = screen.getByTestId("drop-zone");
       expect(dropZone).toBeInTheDocument();
     });
 
     it("procesa correctamente un archivo arrastrado", async () => {
-      render(<App />);
-
-      const file = new File(["(⌐□_□)"], "chucknorris.png", {
-        type: "image/png",
-      });
       const dropArea = screen.getByTestId("landing-container");
+
       fireEvent.dragOver(dropArea);
       fireEvent.drop(dropArea, {
         dataTransfer: {
@@ -60,15 +43,13 @@ describe("App", () => {
         },
       });
       const dropZone = await screen.findByTestId("drop-zone");
+
       expect(dropZone).toBeInTheDocument();
     });
   });
 
   describe("cuando no se proporciona un archivo", () => {
     it("permanece en la LandingPage", async () => {
-      render(<App />);
-      const input = screen.getByTestId("file-input") as HTMLInputElement;
-
       fireEvent.change(input, { target: { files: [] } });
       expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
     });
