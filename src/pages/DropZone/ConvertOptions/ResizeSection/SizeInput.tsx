@@ -13,6 +13,7 @@ export default function SizeInput({ type, value, setValue }: SizeInputProps) {
     <InputBase title={type} htmlFor={id}>
       <input
         className="w-full rounded-md bg-gray-200 p-1 px-3 text-sm"
+        aria-label={type}
         type="number"
         id={id}
         value={value || 0}
